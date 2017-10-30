@@ -48,6 +48,11 @@ class Html extends React.Component {
             <link key={script} rel="preload" href={script} as="script" />
           ))}
           <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+
+          {/* 引入pure css */}
+          <link rel="stylesheet" href="pure-min.css" />
+          <link rel="stylesheet" href="grids-responsive-min.css" />
+
           {styles.map(style => (
             <style
               key={style.id}
