@@ -17,37 +17,12 @@ class Contact extends React.Component {
     title: PropTypes.string.isRequired,
   };
 
-  componentWillMount() {
-    console.log('componentWillMount');
-  }
-
-  setWebSocket = () => {
-    const websocket = new WebSocket('ws://localhost:8000');
-    websocket.onopen = () => {
-      console.log('Websocket connected');
-      websocket.send('Hello Server!');
-    };
-
-    websocket.onmessage = (event) => {
-      console.log('Message from server ', event.data);
-    };
-
-    websocket.onclose = () => {
-      console.log('Websocket disconnected');
-    }
-
-    websocket.onerror = function () {
-      console.log('Websocket error');
-    };
-  }
-
   render() {
     return (
       <div className={s.root}>
         <div className={s.container}>
           <h1>{this.props.title}</h1>
           <p>...</p>
-          <button onClick={this.setWebSocket}>click me connect to websocket</button>
         </div>
       </div>
     );
