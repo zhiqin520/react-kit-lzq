@@ -22,23 +22,6 @@ class Pure extends React.Component {
       <div className={s.root}>
         <div className={s.container}>
           <h1>{this.props.title}</h1>
-
-          <h3>grid image</h3>
-          <div className="pure-g">
-            <div className="pure-u-1 pure-u-md-1-2 pure-u-xl-1-4">
-              <img className="pure-img" src="image/scenery.jpg" />
-            </div>
-            <div className="pure-u-1 pure-u-md-1-2 pure-u-xl-1-4">
-              <img className="pure-img" src="image/scenery.jpg" />
-            </div>
-            <div className="pure-u-1 pure-u-md-1-2 pure-u-xl-1-4">
-              <img className="pure-img" src="image/scenery.jpg" />
-            </div>
-            <div className="pure-u-1 pure-u-md-1-2 pure-u-xl-1-4">
-              <img className="pure-img" src="image/scenery.jpg" />
-            </div>
-          </div>
-
           <h3>grid</h3>
           <div className="pure-g">
             <div className="pure-u-1 pure-u-md-1-3"> ...</div>
