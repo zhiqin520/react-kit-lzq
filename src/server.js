@@ -30,6 +30,20 @@ import schema from './data/schema';
 import assets from './assets.json'; // eslint-disable-line import/no-unresolved
 import config from './config';
 
+// https
+const fs = require('fs');
+const https = require('https');
+
+const privateKey = fs.readFileSync(
+  path.join(__dirname, '../public/ryans-key.pem'),
+  'utf8',
+);
+const certificate = fs.readFileSync(
+  path.join(__dirname, '../public/ryans-cert.pem'),
+  'utf8',
+);
+const credentials = { key: privateKey, cert: certificate };
+
 const app = express();
 
 //
@@ -190,9 +204,10 @@ app.use((err, req, res, next) => {
 // Launch the server
 // -----------------------------------------------------------------------------
 const promise = models.sync().catch(err => console.error(err.stack));
+const httpsServer = https.createServer(credentials, app);
 if (!module.hot) {
   promise.then(() => {
-    app.listen(config.port, () => {
+    httpsServer.listen(config.port, () => {
       console.info(`The server is running at http://localhost:${config.port}/`);
     });
   });
