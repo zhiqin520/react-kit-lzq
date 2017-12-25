@@ -99,6 +99,11 @@ class BaiduMap extends Component {
     this.state = {};
   }
 
+  componentDidMount() {
+    window.HOST_TYPE = "2";
+    window.BMap_loadScriptTime = (new Date).getTime();
+  }
+
   componentWillReceiveProps(newProps) {
     if (newProps && newProps.loadState) {
       createMap(newProps.position); // 创建地图
