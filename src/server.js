@@ -209,7 +209,7 @@ const promise = models.sync().catch(err => console.error(err.stack));
 const httpsServer = https.createServer(credentials, app);
 if (!module.hot) {
   promise.then(() => {
-    httpsServer.listen(config.port, () => {
+    app.listen(config.port, () => {
       console.info(`The server is running at http://localhost:${config.port}/`);
     });
   });
