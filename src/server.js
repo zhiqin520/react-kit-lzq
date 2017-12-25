@@ -11,7 +11,7 @@ import path from 'path';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
-import expressJwt, { UnauthorizedError as Jwt401Error } from 'express-jwt';
+import expressJwt, {UnauthorizedError as Jwt401Error} from 'express-jwt';
 import expressGraphQL from 'express-graphql';
 import jwt from 'jsonwebtoken';
 import fetch from 'node-fetch';
@@ -20,7 +20,8 @@ import ReactDOM from 'react-dom/server';
 import PrettyError from 'pretty-error';
 import App from './components/App';
 import Html from './components/Html';
-import { ErrorPageWithoutStyle } from './routes/error/ErrorPage';
+import CookieHtml from './components/CookieHtml';
+import {ErrorPageWithoutStyle} from './routes/error/ErrorPage';
 import errorPageStyle from './routes/error/ErrorPage.css';
 import createFetch from './createFetch';
 import passport from './passport';
@@ -42,7 +43,7 @@ const certificate = fs.readFileSync(
   path.join(__dirname, '../public/ryans-cert.pem'),
   'utf8',
 );
-const credentials = { key: privateKey, cert: certificate };
+const credentials = {key: privateKey, cert: certificate};
 
 const app = express();
 
@@ -58,7 +59,7 @@ global.navigator.userAgent = global.navigator.userAgent || 'all';
 // -----------------------------------------------------------------------------
 app.use(express.static(path.resolve(__dirname, 'public')));
 app.use(cookieParser());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 //
@@ -102,8 +103,8 @@ app.get(
   }),
   (req, res) => {
     const expiresIn = 60 * 60 * 24 * 180; // 180 days
-    const token = jwt.sign(req.user, config.auth.jwt.secret, { expiresIn });
-    res.cookie('id_token', token, { maxAge: 1000 * expiresIn, httpOnly: true });
+    const token = jwt.sign(req.user, config.auth.jwt.secret, {expiresIn});
+    res.cookie('id_token', token, {maxAge: 1000 * expiresIn, httpOnly: true});
     res.redirect('/');
   },
 );
@@ -116,7 +117,7 @@ app.use(
   expressGraphQL(req => ({
     schema,
     graphiql: __DEV__,
-    rootValue: { request: req },
+    rootValue: {request: req},
     pretty: __DEV__,
   })),
 );
@@ -127,6 +128,8 @@ app.use(
 app.get('*', async (req, res, next) => {
   try {
     const css = new Set();
+
+    console.log('user-agent',req.headers['user-agent']);
 
     // Global (context) variables that can be easily accessed from any React component
     // https://facebook.github.io/react/docs/context.html
@@ -155,11 +158,11 @@ app.get('*', async (req, res, next) => {
       return;
     }
 
-    const data = { ...route };
+    const data = {...route};
     data.children = ReactDOM.renderToString(
       <App context={context}>{route.component}</App>,
     );
-    data.styles = [{ id: 'css', cssText: [...css].join('') }];
+    data.styles = [{id: 'css', cssText: [...css].join('')}];
     data.scripts = [assets.vendor.js];
     if (route.chunks) {
       data.scripts.push(...route.chunks.map(chunk => assets[chunk].js));
@@ -172,10 +175,45 @@ app.get('*', async (req, res, next) => {
     const html = ReactDOM.renderToStaticMarkup(<Html {...data} />);
     res.status(route.status || 200);
     res.send(`<!doctype html>${html}`);
+
+    // if (!req.headers['cookie'] || req.headers['cookie'].indexOf('width') < 0) {
+    //   const cookieHtml = ReactDOM.renderToStaticMarkup(<CookieHtml/>);
+    //   res.status(route.status || 200);
+    //   res.send(`<!doctype html>${cookieHtml}`);
+    //
+    // } else {
+    //   let width = readCookie(req.headers['cookie'], 'width');
+    //   let fontSize = 100 * ( width / 414) + "px";
+    //   data.fontSize = fontSize;
+    //
+    //   const html = ReactDOM.renderToStaticMarkup(<Html {...data} />);
+    //   res.status(route.status || 200);
+    //   res.send(`<!doctype html>${html}`);
+    // }
   } catch (err) {
     next(err);
   }
 });
+
+
+function readCookie(cookie, name) {
+  let nameEQ = `${name}`;
+  let ca = cookie.split(';');
+
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+
+    while (c.charAt(0) === ' ') {
+      c = c.substring(1, c.length);
+    }
+
+    if (c.indexOf(nameEQ) === 0) {
+      return c.substring(nameEQ.length + 1, c.length);
+    }
+  }
+
+  return null;
+};
 
 //
 // Error handling
@@ -191,9 +229,9 @@ app.use((err, req, res, next) => {
     <Html
       title="Internal Server Error"
       description={err.message}
-      styles={[{ id: 'css', cssText: errorPageStyle._getCss() }]} // eslint-disable-line no-underscore-dangle
+      styles={[{id: 'css', cssText: errorPageStyle._getCss()}]} // eslint-disable-line no-underscore-dangle
     >
-      {ReactDOM.renderToString(<ErrorPageWithoutStyle error={err} />)}
+    {ReactDOM.renderToString(<ErrorPageWithoutStyle error={err}/>)}
     </Html>,
   );
   res.status(err.status || 500);

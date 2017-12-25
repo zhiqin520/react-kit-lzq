@@ -35,7 +35,8 @@ class Html extends React.Component {
   };
 
   render() {
-    const { title, description, styles, scripts, app, children } = this.props;
+    const { title, description, styles, scripts, app, children, fontSize } = this.props;
+    //style={{fontSize: fontSize}}
     return (
       <html className="no-js" lang="en">
         <head>
@@ -48,6 +49,12 @@ class Html extends React.Component {
             <link key={script} rel="preload" href={script} as="script" />
           ))}
           <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+
+          {/* 引入bootstrap css */}
+          <link rel="stylesheet" href="/vendor/css/bootstrap.min.css" />
+          {/* 引入common css */}
+          <link rel="stylesheet" href="/vendor/css/common.css" />
+
           {styles.map(style => (
             <style
               key={style.id}
@@ -61,6 +68,18 @@ class Html extends React.Component {
           <script
             dangerouslySetInnerHTML={{ __html: `window.App=${serialize(app)}` }}
           />
+          <script
+            dangerouslySetInnerHTML={{ __html:
+              `(function pageAdapted() {
+                console.log('Html.js pageAdapted')
+                var e = 100;
+                var t = document.documentElement;
+                var n = t.clientWidth;
+                n && (t.style.fontSize = e * (n / 414) + "px");
+              })()` }}
+          />
+          {/*<script src='/pageAdapted.js'></script>*/}
+
           {scripts.map(script => <script key={script} src={script} />)}
           {config.analytics.googleTrackingId && (
             <script
