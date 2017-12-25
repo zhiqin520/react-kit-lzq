@@ -35,7 +35,7 @@ class Html extends React.Component {
   };
 
   render() {
-    const { title, description, styles, scripts, app, children, fontSize } = this.props;
+    const { title, description, styles, scripts, app, children } = this.props;
     //style={{fontSize: fontSize}}
     return (
       <html className="no-js" lang="en">
@@ -78,8 +78,6 @@ class Html extends React.Component {
                 n && (t.style.fontSize = e * (n / 414) + "px");
               })()` }}
           />
-          {/*<script src='/pageAdapted.js'></script>*/}
-
           {scripts.map(script => <script key={script} src={script} />)}
           {config.analytics.googleTrackingId && (
             <script

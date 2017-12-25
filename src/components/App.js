@@ -69,9 +69,9 @@ class App extends React.PureComponent {
   render() {
     // NOTE: If you need to add or modify header, footer etc. of the app,
     // please do that inside the Layout component.
-    return React.Children.only(this.props.children);
-
     // return typeof window !== 'undefined' ? React.Children.only(this.props.children) : <div></div>;
+
+    return React.Children.only(this.props.children);
   }
 }
 

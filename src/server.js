@@ -20,7 +20,6 @@ import ReactDOM from 'react-dom/server';
 import PrettyError from 'pretty-error';
 import App from './components/App';
 import Html from './components/Html';
-import CookieHtml from './components/CookieHtml';
 import {ErrorPageWithoutStyle} from './routes/error/ErrorPage';
 import errorPageStyle from './routes/error/ErrorPage.css';
 import createFetch from './createFetch';
@@ -175,45 +174,10 @@ app.get('*', async (req, res, next) => {
     const html = ReactDOM.renderToStaticMarkup(<Html {...data} />);
     res.status(route.status || 200);
     res.send(`<!doctype html>${html}`);
-
-    // if (!req.headers['cookie'] || req.headers['cookie'].indexOf('width') < 0) {
-    //   const cookieHtml = ReactDOM.renderToStaticMarkup(<CookieHtml/>);
-    //   res.status(route.status || 200);
-    //   res.send(`<!doctype html>${cookieHtml}`);
-    //
-    // } else {
-    //   let width = readCookie(req.headers['cookie'], 'width');
-    //   let fontSize = 100 * ( width / 414) + "px";
-    //   data.fontSize = fontSize;
-    //
-    //   const html = ReactDOM.renderToStaticMarkup(<Html {...data} />);
-    //   res.status(route.status || 200);
-    //   res.send(`<!doctype html>${html}`);
-    // }
   } catch (err) {
     next(err);
   }
 });
-
-
-function readCookie(cookie, name) {
-  let nameEQ = `${name}`;
-  let ca = cookie.split(';');
-
-  for (let i = 0; i < ca.length; i++) {
-    let c = ca[i];
-
-    while (c.charAt(0) === ' ') {
-      c = c.substring(1, c.length);
-    }
-
-    if (c.indexOf(nameEQ) === 0) {
-      return c.substring(nameEQ.length + 1, c.length);
-    }
-  }
-
-  return null;
-};
 
 //
 // Error handling
