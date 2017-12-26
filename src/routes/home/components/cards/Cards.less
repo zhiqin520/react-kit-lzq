@@ -1,0 +1,189 @@
+@import '../../../../components/default.less';
+
+@media (min-width: 1000px) {
+  .cardWrapper {
+    width: 1000px;
+    margin: 0 auto;
+    padding-bottom: 30px;
+    text-align: left;
+    font-family: @font-family;
+    .flex_between();
+  }
+
+  .cards {
+    width: 315px;
+    color: #333;
+    background: #fff;
+    cursor: default;
+    transition: all .5s;
+    -webkit-transition: all .5s;
+  }
+
+  .cards:hover {
+    box-shadow: 0 0 20px 0 #CECBCB;
+    -webkit-box-shadow: 0 0 20px 0 #CECBCB;
+  }
+
+  .pic {
+    width: 100%;
+    height: 197px;
+    > img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .content {
+    padding: 24px 20px 32px;
+  }
+
+  .title > div:first-child {
+    font-size: 22px;
+    font-weight: bolder;
+    line-height: 30px;
+    margin-bottom: 2px;
+  }
+
+  .title > div:last-child {
+    font-size: 18px;
+    font-weight: bolder;
+    line-height: 25px;
+  }
+
+  .line {
+    width: 30px;
+    height: 3px;
+    background: #ff5738;
+    margin: 10px 0;
+  }
+
+  .detail {
+    font-size: 14px;
+    text-align: justify;
+    //margin-top: 10px;
+    //padding-top: 10px;
+    //border-top: 3px solid transparent;
+    //border-image: 100% 0 0 linear-gradient(90deg, #ff5738 30px, transparent 0);
+    //-webkit-border-image: 100% 0 0 linear-gradient(90deg, #ff5738 30px, transparent 0);
+  }
+
+  .greyBtn {
+    width: 98px;
+    height: 34px;
+    line-height: 32px;
+    text-align: center;
+    border: 1px solid #333;
+    border-radius: 2px;
+    background: #fff;
+    color: #333;
+    font-size: 14px;
+    margin-top: 15px;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .triangle {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    border: 1px solid #333;
+    border-width: 0 1px 1px 0;
+    margin-bottom: 1px;
+    margin-left: 1px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .cardWrapper {
+    width: 100%;
+    padding: 0 .1rem .46rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: @font-family;
+  }
+
+  .cards {
+    width: 100%;
+    min-height: 2.19rem;
+    color: #333;
+    background: #fff;
+    margin-bottom: .12rem;
+  }
+
+  .pic {
+    display: inline-block;
+    width: 1.96rem;
+    height: 2.19rem;
+    float: left;
+    img {
+      width: 1.96rem;
+      height: 2.19rem;
+    }
+  }
+
+  .content {
+    display: inline-block;
+    width: 1.96rem;
+    padding: .15rem .1rem .1rem .13rem;
+  }
+
+  .title > div:first-child {
+    font-size: .16rem;
+    font-weight: bold;
+    line-height: .22rem;
+    display: block;
+  }
+
+  .title > div:last-child {
+    font-size: .14rem;
+    font-weight: bold;
+    line-height: .2rem;
+    margin-top: .04rem;
+  }
+
+  .line {
+    width: .18rem;
+    height: .02rem;
+    margin-top: .03rem;
+    margin-bottom: .11rem;
+    margin-left: .02rem;
+    background: #ff5738;
+  }
+
+  .detail {
+    font-size: .12rem;
+    text-align: justify;
+    //margin-top: .03rem;
+    //padding-top: .11rem;
+    //border-top: .02rem solid transparent;
+    //border-image: 100% 0 0 linear-gradient(90deg, #ff5738 .18rem, transparent 0);
+  }
+
+  .greyBtn {
+    width: .9rem;
+    height: .26rem;
+    line-height: .26rem;
+    text-align: center;
+    border: 1px solid #333;
+    border-radius: 1px;
+    background: #fff;
+    color: #333;
+    font-size: .12rem;
+    margin-top: .15rem;
+  }
+
+  .triangle {
+    display: inline-block;
+    width: .05rem;
+    height: .05rem;
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    border: 1px solid #333;
+    border-width: 0 1px 1px 0;
+    margin-bottom: .02rem;
+    margin-left: .02rem;
+  }
+}
