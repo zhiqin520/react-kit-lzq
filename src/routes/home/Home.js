@@ -5,15 +5,6 @@ import s from './Home.less';
 import Cards from './components/cards/Cards';
 
 class Home extends React.Component {
-//   static propTypes = {
-//     news: PropTypes.arrayOf(
-//       PropTypes.shape({
-//         title: PropTypes.string.isRequired,
-//         link: PropTypes.string.isRequired,
-//         content: PropTypes.string,
-//       }),
-//     ).isRequired,
-//   };
 
   render() {
     const { bannerData, cardData } = this.props;

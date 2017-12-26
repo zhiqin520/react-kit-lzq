@@ -15,6 +15,7 @@ import expressJwt, {UnauthorizedError as Jwt401Error} from 'express-jwt';
 import expressGraphQL from 'express-graphql';
 import jwt from 'jsonwebtoken';
 import fetch from 'node-fetch';
+import axios from 'axios';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 import PrettyError from 'pretty-error';
@@ -29,6 +30,8 @@ import models from './data/models';
 import schema from './data/schema';
 import assets from './assets.json'; // eslint-disable-line import/no-unresolved
 import config from './config';
+
+global.axios = axios;
 
 // https
 const fs = require('fs');
@@ -127,9 +130,6 @@ app.use(
 app.get('*', async (req, res, next) => {
   try {
     const css = new Set();
-
-    console.log('user-agent',req.headers['user-agent']);
-
     // Global (context) variables that can be easily accessed from any React component
     // https://facebook.github.io/react/docs/context.html
     const context = {
@@ -140,6 +140,7 @@ app.get('*', async (req, res, next) => {
         styles.forEach(style => css.add(style._getCss()));
       },
       // Universal HTTP client
+      axios,
       fetch: createFetch(fetch, {
         baseUrl: config.api.serverUrl,
         cookie: req.headers.cookie,
