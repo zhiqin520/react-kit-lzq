@@ -129,6 +129,11 @@ app.use(
 // -----------------------------------------------------------------------------
 app.get('*', async (req, res, next) => {
   try {
+
+    const userAgent = req.headers['user-agent'].toLowerCase();
+    const agentID = userAgent.match(/(iphone|ipod|ipad|android)/);
+    const isMobile = agentID ? true : false;
+
     const css = new Set();
     // Global (context) variables that can be easily accessed from any React component
     // https://facebook.github.io/react/docs/context.html
@@ -141,6 +146,7 @@ app.get('*', async (req, res, next) => {
       },
       // Universal HTTP client
       axios,
+      isMobile,
       fetch: createFetch(fetch, {
         baseUrl: config.api.serverUrl,
         cookie: req.headers.cookie,
@@ -170,6 +176,7 @@ app.get('*', async (req, res, next) => {
     data.scripts.push(assets.client.js);
     data.app = {
       apiUrl: config.api.clientUrl,
+      isMobile,
     };
 
     const html = ReactDOM.renderToStaticMarkup(<Html {...data} />);

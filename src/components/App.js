@@ -16,6 +16,7 @@ const ContextType = {
   // Universal HTTP client
   fetch: PropTypes.func.isRequired,
   axios: PropTypes.func.isRequired,
+  isMobile: PropTypes.bool.isRequired,
 };
 
 /**

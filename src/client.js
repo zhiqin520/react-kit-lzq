@@ -34,6 +34,7 @@ const context = {
   },
   // Universal HTTP client
   axios,
+  isMobile: window.App.isMobile,
   fetch: createFetch(fetch, {
     baseUrl: window.App.apiUrl,
   }),
