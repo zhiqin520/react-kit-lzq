@@ -6,6 +6,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
+import pkg from '../../package.json';
 
 /* eslint-disable max-len */
 
@@ -15,9 +16,14 @@ if (process.env.BROWSER) {
   );
 }
 
-module.exports = {
+export default {
   // Node.js app
   port: process.env.PORT || 3000,
+
+  // 日志
+  urgentFlag: '[URGENT]',
+  logPath: `./logs/${pkg.name}.log`,
+  logCat: pkg.name,
 
   // API Gateway
   api: {

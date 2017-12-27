@@ -29,7 +29,9 @@ import router from './router';
 import models from './data/models';
 import schema from './data/schema';
 import assets from './assets.json'; // eslint-disable-line import/no-unresolved
-import config from './config';
+import config from './config/server';
+import Log, { reqHandleErr, jsonMsg } from './utils/log';
+
 
 global.axios = axios;
 
@@ -130,6 +132,8 @@ app.use(
 app.get('*', async (req, res, next) => {
   try {
 
+    Log.info(jsonMsg(req.headers['user-agent']));
+
     const userAgent = req.headers['user-agent'].toLowerCase();
     const agentID = userAgent.match(/(iphone|ipod|ipad|android)/);
     const isMobile = agentID ? true : false;
@@ -183,6 +187,7 @@ app.get('*', async (req, res, next) => {
     res.status(route.status || 200);
     res.send(`<!doctype html>${html}`);
   } catch (err) {
+    Log.error(reqHandleErr(err, req, '服务端出错'));
     next(err);
   }
 });
@@ -199,7 +204,7 @@ app.use((err, req, res, next) => {
   console.error(pe.render(err));
   const html = ReactDOM.renderToStaticMarkup(
     <Html
-      title="Internal Server Error"
+      title="服务器内部错误"
       description={err.message}
       styles={[{id: 'css', cssText: errorPageStyle._getCss()}]} // eslint-disable-line no-underscore-dangle
     >
