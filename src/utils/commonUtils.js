@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 /**
  * rem自适应布局
  */
@@ -99,4 +101,21 @@ export const getExplorerInfo = () => {
   }
 }
 
+
+export const recordErrorLog = (logInfo, level = 'info') => {
+  if (process.env.BROWSER) {
+    axios({
+      method: 'post',
+      url: '/errorLog/record',
+      data: {
+        info: logInfo,
+        log: level
+      }
+    });
+  } else {
+    import('./log').then((Log) => {
+      Log.default[level](JSON.stringify(logInfo));
+    });
+  }
+}
 

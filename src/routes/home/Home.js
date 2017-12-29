@@ -19,7 +19,7 @@ class Home extends React.Component {
           width: 1rem;
           height: 1rem;
         </div>
-        <div className={s.news}>{bannerData[0].title}</div>
+        <div className={s.news}>{JSON.stringify(bannerData)}</div>
         <Cards cardData={cardData}/>
       </div>
     );

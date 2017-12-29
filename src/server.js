@@ -157,24 +157,32 @@ app.get('*', async (req, res, next) => {
       }),
     };
 
-    const route = await router.resolve({
-      ...context,
-      pathname: req.path,
-      query: req.query,
-    });
+    let route = {
+      component: React.createElement('div', { className: 'holder' }),
+    };
 
-    if (route.redirect) {
+    try {
+      route = await router.resolve({
+        ...context,
+        pathname: req.path,
+        query: req.query,
+      });
+    } catch (err) {
+      Log.error(reqHandleErr(err, req, '服务端 router.resolve 出错'));
+    }
+
+    if (route && route.redirect) {
       res.redirect(route.status || 302, route.redirect);
       return;
     }
 
     const data = {...route};
     data.children = ReactDOM.renderToString(
-      <App context={context}>{route.component}</App>,
+      <App context={context}>{route && route.component}</App>,
     );
     data.styles = [{id: 'css', cssText: [...css].join('')}];
     data.scripts = [assets.vendor.js];
-    if (route.chunks) {
+    if (route && route.chunks) {
       data.scripts.push(...route.chunks.map(chunk => assets[chunk].js));
     }
     data.scripts.push(assets.client.js);
@@ -184,12 +192,24 @@ app.get('*', async (req, res, next) => {
     };
 
     const html = ReactDOM.renderToStaticMarkup(<Html {...data} />);
-    res.status(route.status || 200);
+    res.status(route && route.status || 200);
     res.send(`<!doctype html>${html}`);
   } catch (err) {
     Log.error(reqHandleErr(err, req, '服务端出错'));
     next(err);
   }
+});
+
+app.post('/errorLog/record', (req, res) => {
+  const defaultLogLevel = 'warn';
+  let logLevel = req.body.log || defaultLogLevel;
+
+  if (!Log[logLevel]) {
+    logLevel = defaultLogLevel;
+  }
+
+  Log[logLevel](JSON.stringify(req.body));
+  res.sendStatus(200);
 });
 
 //
