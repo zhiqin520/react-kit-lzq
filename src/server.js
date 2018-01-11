@@ -31,6 +31,7 @@ import schema from './data/schema';
 import assets from './assets.json'; // eslint-disable-line import/no-unresolved
 import config from './config/server';
 import Log, { reqHandleErr, jsonMsg } from './utils/log';
+import compression from 'compression';
 
 
 global.axios = axios;
@@ -50,6 +51,9 @@ const certificate = fs.readFileSync(
 const credentials = {key: privateKey, cert: certificate};
 
 const app = express();
+const cluster = require('cluster');
+const numCPUs = require('os').cpus().length;
+const needCluster = process.env.CLUSTER || false;
 
 //
 // Tell any CSS tooling (such as Material UI) to use all vendor prefixes if the
@@ -61,6 +65,7 @@ global.navigator.userAgent = global.navigator.userAgent || 'all';
 //
 // Register Node.js middleware
 // -----------------------------------------------------------------------------
+app.use(compression());
 app.use(express.static(path.resolve(__dirname, 'public')));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -240,12 +245,29 @@ app.use((err, req, res, next) => {
 // -----------------------------------------------------------------------------
 const promise = models.sync().catch(err => console.error(err.stack));
 const httpsServer = https.createServer(credentials, app);
-if (!module.hot) {
-  promise.then(() => {
+if (cluster.isMaster && needCluster) {
+  console.log(`主进程 ${process.pid} 正在运行`);
+
+  // Fork workers.
+  for (let i = 0; i < numCPUs; i++) {
+    cluster.fork();
+  }
+
+  cluster.on('exit', (worker, code, signal) => {
+    /* eslint-disable no-console */
+    console.log('Worker %d died :(', worker.id);
+    cluster.fork();
+  });
+} else {
+  if (!module.hot) {
+    // promise.then(() => {
     app.listen(config.port, () => {
       console.info(`The server is running at http://localhost:${config.port}/`);
     });
-  });
+    // });
+  }
+
+  console.log(`工作进程 ${process.pid} 已启动`);
 }
 
 //
