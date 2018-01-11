@@ -24,6 +24,10 @@ const routes = {
       load: () => import(/* webpackChunkName: 'map' */ './hxzqMap'),
     },
     {
+      path: '/canvas',
+      load: () => import(/* webpackChunkName: 'canvas' */ './canvas'),
+    },
+    {
       path: '/contact',
       load: () => import(/* webpackChunkName: 'contact' */ './contact'),
     },
